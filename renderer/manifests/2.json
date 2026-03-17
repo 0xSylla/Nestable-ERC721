@@ -1,0 +1,16 @@
+{
+  "layers": [
+    {
+      "uri": "ipfs://QmTLofHoNveoW9UCLPe7GQkfJ8N4S3raPb5YfCNqxw4ZTT/2.png",
+      "z": 0
+    },
+    {
+      "slot": "PASSENGER",
+      "z": 10
+    },
+    {
+      "slot": "MOON",
+      "z": 20
+    }
+  ]
+}

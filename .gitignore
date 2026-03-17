@@ -24,6 +24,10 @@ nestable_charcter_nft/
 passenger/
 planet/
 
+# Raw art assets
+BeracPOL*/
+python_scripts/BeracPOL*/
+
 # OS
 .DS_Store
 Thumbs.db

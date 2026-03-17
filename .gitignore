@@ -1,0 +1,26 @@
+# Compiler files
+cache/
+out/
+
+# Ignores development broadcast logs
+!/broadcast
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+
+# Node
+node_modules/
+
+# Generated IPFS folders
+nestable_charcter_nft/
+passenger/
+planet/
+
+# OS
+.DS_Store
+Thumbs.db

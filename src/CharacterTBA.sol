@@ -22,7 +22,6 @@ import "./Interfaces/IERC6551Account.sol";
  * is embedded in the proxy bytecode and read via `token()`.
  */
 contract CharacterTBA is IERC6551Account, IERC6551Executable, IERC1155Receiver {
-
     // ─── Immutables ───────────────────────────────────────────────────────────
 
     /// @notice The GearNFT contract — the only ERC1155 this TBA accepts
@@ -95,12 +94,12 @@ contract CharacterTBA is IERC6551Account, IERC6551Executable, IERC1155Receiver {
      *
      * @param operation Must be 0 (CALL). DELEGATECALL/CREATE not supported.
      */
-    function execute(
-        address to,
-        uint256 value,
-        bytes calldata data,
-        uint8 operation
-    ) external payable override returns (bytes memory result) {
+    function execute(address to, uint256 value, bytes calldata data, uint8 operation)
+        external
+        payable
+        override
+        returns (bytes memory result)
+    {
         require(operation == 0, "Only CALL supported");
 
         if (to == gearContract) {
@@ -123,25 +122,23 @@ contract CharacterTBA is IERC6551Account, IERC6551Executable, IERC1155Receiver {
      * @dev `msg.sender` = GearNFT (the contract calling this callback)
      *      `operator`   = SlotRegistry (who called safeTransferFrom on GearNFT)
      */
-    function onERC1155Received(
-        address operator,
-        address,
-        uint256,
-        uint256,
-        bytes calldata
-    ) external override view returns (bytes4) {
+    function onERC1155Received(address operator, address, uint256, uint256, bytes calldata)
+        external
+        view
+        override
+        returns (bytes4)
+    {
         require(msg.sender == gearContract, "Unknown token contract");
         require(operator == slotRegistry, "Only registry can deposit gear");
         return IERC1155Receiver.onERC1155Received.selector;
     }
 
-    function onERC1155BatchReceived(
-        address operator,
-        address,
-        uint256[] calldata,
-        uint256[] calldata,
-        bytes calldata
-    ) external override view returns (bytes4) {
+    function onERC1155BatchReceived(address operator, address, uint256[] calldata, uint256[] calldata, bytes calldata)
+        external
+        view
+        override
+        returns (bytes4)
+    {
         require(msg.sender == gearContract, "Unknown token contract");
         require(operator == slotRegistry, "Only registry can deposit gear");
         return IERC1155Receiver.onERC1155BatchReceived.selector;
@@ -150,11 +147,8 @@ contract CharacterTBA is IERC6551Account, IERC6551Executable, IERC1155Receiver {
     // ─── ERC165 ──────────────────────────────────────────────────────────────
 
     function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
-        return
-            interfaceId == type(IERC6551Account).interfaceId ||
-            interfaceId == type(IERC6551Executable).interfaceId ||
-            interfaceId == type(IERC1155Receiver).interfaceId ||
-            interfaceId == type(IERC165).interfaceId;
+        return interfaceId == type(IERC6551Account).interfaceId || interfaceId == type(IERC6551Executable).interfaceId
+            || interfaceId == type(IERC1155Receiver).interfaceId || interfaceId == type(IERC165).interfaceId;
     }
 
     // ─── Internal ────────────────────────────────────────────────────────────

@@ -28,7 +28,6 @@ import "./Interfaces/IERC6551Account.sol";
  *   3. Player calls SlotRegistry.unequipSlot(charId, slot)
  */
 contract SlotRegistry is Ownable, ReentrancyGuard {
-
     // ─── Types ────────────────────────────────────────────────────────────────
 
     struct EquippedItem {
@@ -36,11 +35,11 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
     }
 
     struct SlotConfig {
-        bool  exists;
+        bool exists;
         /// @dev When true, only gear whose tokenId encodes this gearTypeIndex can be equipped.
         ///      gearTypeIndex is decoded as: (gearId % 1000) - 1
         ///      (HELMET=0, ARMOR=1, BOOTS=2, WEAPON=3 — matches GearNFT.GearType enum)
-        bool  typed;
+        bool typed;
         uint8 gearTypeIndex;
     }
 
@@ -102,20 +101,14 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
         gearContract = gearContract_;
 
         _addSlot(keccak256("MOON"), true, 0);
-        _addSlot(keccak256("PASSENGER"),  true, 1);
+        _addSlot(keccak256("PASSENGER"), true, 1);
     }
 
     // ─── View ─────────────────────────────────────────────────────────────────
 
     /// @notice Returns the deterministic TBA address for a character (may not be deployed yet).
     function getTBA(uint256 charId) public view returns (address) {
-        return erc6551Registry.account(
-            tbaImplementation,
-            TBA_SALT,
-            block.chainid,
-            characterNFT,
-            charId
-        );
+        return erc6551Registry.account(tbaImplementation, TBA_SALT, block.chainid, characterNFT, charId);
     }
 
     /// @notice Returns the gearId equipped in a slot (0 = empty).
@@ -154,13 +147,7 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
         }
 
         // Deploy TBA if not yet created (idempotent — returns existing address if deployed)
-        address tba = erc6551Registry.createAccount(
-            tbaImplementation,
-            TBA_SALT,
-            block.chainid,
-            characterNFT,
-            charId
-        );
+        address tba = erc6551Registry.createAccount(tbaImplementation, TBA_SALT, block.chainid, characterNFT, charId);
 
         // EFFECTS
         _slotItem[charId][slot] = gearId;
@@ -172,8 +159,8 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
         IERC1155(gearContract).safeTransferFrom(msg.sender, tba, gearId, 1, "");
 
         emit SlotEquipped(charId, slot, gearId);
-        emit MetadataUpdate(charId);       // character image gains this gear layer
-        emit GearMetadataUpdate(gearId);  // gear image flips color → B&W
+        emit MetadataUpdate(charId); // character image gains this gear layer
+        emit GearMetadataUpdate(gearId); // gear image flips color → B&W
     }
 
     /**
@@ -198,18 +185,12 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
         // INTERACTION
         // Tell TBA to transfer gear back to owner.
         // CharacterTBA.execute() allows this because msg.sender == slotRegistry.
-        bytes memory transferData = abi.encodeWithSelector(
-            IERC1155.safeTransferFrom.selector,
-            tba,
-            msg.sender,
-            gearId,
-            1,
-            ""
-        );
+        bytes memory transferData =
+            abi.encodeWithSelector(IERC1155.safeTransferFrom.selector, tba, msg.sender, gearId, 1, "");
         IERC6551Executable(tba).execute(gearContract, 0, transferData, 0);
 
         emit SlotUnequipped(charId, slot, gearId);
-        emit MetadataUpdate(charId);      // character image loses this gear layer
+        emit MetadataUpdate(charId); // character image loses this gear layer
         emit GearMetadataUpdate(gearId); // gear image flips B&W → color
     }
 
@@ -245,14 +226,8 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
             gearEquippedCount[gearId]--;
 
             // INTERACTION
-            bytes memory transferData = abi.encodeWithSelector(
-                IERC1155.safeTransferFrom.selector,
-                tba,
-                charOwner,
-                gearId,
-                1,
-                ""
-            );
+            bytes memory transferData =
+                abi.encodeWithSelector(IERC1155.safeTransferFrom.selector, tba, charOwner, gearId, 1, "");
             IERC6551Executable(tba).execute(gearContract, 0, transferData, 0);
 
             emit SlotUnequipped(charId, slot, gearId);
@@ -279,7 +254,7 @@ contract SlotRegistry is Ownable, ReentrancyGuard {
     function _addSlot(bytes32 slot, bool typed, uint8 gearTypeIndex) internal {
         require(!_slots[slot].exists, "Slot exists");
         require(slotCount < MAX_SLOTS, "Too many slots");
-        _slots[slot] = SlotConfig({ exists: true, typed: typed, gearTypeIndex: gearTypeIndex });
+        _slots[slot] = SlotConfig({exists: true, typed: typed, gearTypeIndex: gearTypeIndex});
         slotCount++;
         _slotKeys.push(slot);
         emit SlotCreated(slot);

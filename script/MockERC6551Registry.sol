@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {Script, console} from "forge-std/Script.sol";
-import {IERC6551Registry}  from "../src/Interfaces/IERC6551Registry.sol";
+import {IERC6551Registry} from "../src/Interfaces/IERC6551Registry.sol";
 
 // ─── Minimal ERC-6551 Registry (local testing only) ──────────────────────────
 //
@@ -21,7 +21,6 @@ import {IERC6551Registry}  from "../src/Interfaces/IERC6551Registry.sol";
 // DO NOT use in production. This mock skips the CREATE2 prefix check.
 
 contract MockERC6551Registry is IERC6551Registry {
-
     // salt+chainId+tokenContract+tokenId → deployed account
     mapping(bytes32 => address) private _accounts;
 
@@ -47,36 +46,32 @@ contract MockERC6551Registry is IERC6551Registry {
         emit ERC6551AccountCreated(account, implementation, salt, chainId, tokenContract, tokenId);
     }
 
-    function account(
-        address implementation,
-        bytes32 salt,
-        uint256 chainId,
-        address tokenContract,
-        uint256 tokenId
-    ) external view override returns (address) {
+    function account(address implementation, bytes32 salt, uint256 chainId, address tokenContract, uint256 tokenId)
+        external
+        view
+        override
+        returns (address)
+    {
         return _accounts[_key(implementation, salt, chainId, tokenContract, tokenId)];
     }
 
     // ─── Internal ─────────────────────────────────────────────────────────────
 
-    function _key(
-        address implementation,
-        bytes32 salt,
-        uint256 chainId,
-        address tokenContract,
-        uint256 tokenId
-    ) internal pure returns (bytes32) {
+    function _key(address implementation, bytes32 salt, uint256 chainId, address tokenContract, uint256 tokenId)
+        internal
+        pure
+        returns (bytes32)
+    {
         return keccak256(abi.encode(implementation, salt, chainId, tokenContract, tokenId));
     }
 
     /// @dev Produces the ERC-6551 EIP-1167 proxy bytecode with the standard footer.
     ///      Layout matches the offset CharacterTBA.token() reads at 0x4d.
-    function _proxyBytecode(
-        address implementation,
-        uint256 chainId,
-        address tokenContract,
-        uint256 tokenId
-    ) internal pure returns (bytes memory) {
+    function _proxyBytecode(address implementation, uint256 chainId, address tokenContract, uint256 tokenId)
+        internal
+        pure
+        returns (bytes memory)
+    {
         return abi.encodePacked(
             hex"3d60ad80600a3d3981f3363d3d373d3d3d363d73",
             implementation,

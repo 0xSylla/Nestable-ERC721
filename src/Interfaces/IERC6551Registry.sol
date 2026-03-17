@@ -23,11 +23,8 @@ interface IERC6551Registry {
     ) external returns (address account);
 
     /// @notice Compute the deterministic TBA address without deploying.
-    function account(
-        address implementation,
-        bytes32 salt,
-        uint256 chainId,
-        address tokenContract,
-        uint256 tokenId
-    ) external view returns (address account);
+    function account(address implementation, bytes32 salt, uint256 chainId, address tokenContract, uint256 tokenId)
+        external
+        view
+        returns (address account);
 }

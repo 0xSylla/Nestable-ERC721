@@ -15,14 +15,13 @@ abstract contract CodeConstants {
 }
 
 contract HelperConfig is CodeConstants, Script {
-
     struct NetworkConfig {
         address erc6551Registry;
-        string  charName;
-        string  charSymbol;
+        string charName;
+        string charSymbol;
         uint256 charMaxSupply;
-        string  baseURI;
-        uint96  royaltyBps;
+        string baseURI;
+        uint96 royaltyBps;
         address account;
     }
 
@@ -54,24 +53,24 @@ contract HelperConfig is CodeConstants, Script {
     function getSepoliaConfig() internal pure returns (NetworkConfig memory) {
         return NetworkConfig({
             erc6551Registry: CANONICAL_ERC6551_REGISTRY,
-            charName:        "PAULDIRAC",
-            charSymbol:      "DIRAC",
-            charMaxSupply:   100,
-            baseURI:         "ipfs://YOUR_PRODUCTION_CID/",
-            royaltyBps:      500,
-            account:         address(0) // set via PRIVATE_KEY env var
+            charName: "PAULDIRAC",
+            charSymbol: "DIRAC",
+            charMaxSupply: 100,
+            baseURI: "ipfs://YOUR_PRODUCTION_CID/",
+            royaltyBps: 500,
+            account: address(0) // set via PRIVATE_KEY env var
         });
     }
 
     function getBaseConfig() internal pure returns (NetworkConfig memory) {
         return NetworkConfig({
             erc6551Registry: CANONICAL_ERC6551_REGISTRY,
-            charName:        "PAULDIRAC",
-            charSymbol:      "DIRAC",
-            charMaxSupply:   100,
-            baseURI:         "ipfs://YOUR_PRODUCTION_CID/",
-            royaltyBps:      500,
-            account:         address(0)
+            charName: "PAULDIRAC",
+            charSymbol: "DIRAC",
+            charMaxSupply: 100,
+            baseURI: "ipfs://YOUR_PRODUCTION_CID/",
+            royaltyBps: 500,
+            account: address(0)
         });
     }
 
@@ -88,12 +87,12 @@ contract HelperConfig is CodeConstants, Script {
 
         NetworkConfig memory config = NetworkConfig({
             erc6551Registry: address(mockRegistry),
-            charName:        "PAULDIRAC",
-            charSymbol:      "DIRAC",
-            charMaxSupply:   3,
-            baseURI:         "ipfs://bafybeiftk2gwspghu6hmq4gfbkbzerbzpt5advld4cyz75ep55fxpeggcu/",
-            royaltyBps:      500,
-            account:         0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 // Anvil default #0
+            charName: "PAULDIRAC",
+            charSymbol: "DIRAC",
+            charMaxSupply: 3,
+            baseURI: "ipfs://bafybeiftk2gwspghu6hmq4gfbkbzerbzpt5advld4cyz75ep55fxpeggcu/",
+            royaltyBps: 500,
+            account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 // Anvil default #0
         });
 
         s_networkConfigs[LOCAL_CHAIN_ID] = config;

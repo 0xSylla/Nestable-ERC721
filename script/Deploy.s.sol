@@ -3,13 +3,13 @@ pragma solidity ^0.8.20;
 
 import {Script, console} from "forge-std/Script.sol";
 
-import {GearNFT}               from "../src/GearNFT.sol";
-import {NestableCharacterNFT}  from "../src/CharacterNFT.sol";
-import {CharacterTBA}          from "../src/CharacterTBA.sol";
-import {SlotRegistry}          from "../src/SlotRegistry.sol";
-import {MintStageRegistry}     from "../src/Registry/MintStageRegistry.sol";
-import {BaseNFTParams}         from "../src/Base/BaseNFTNativePaymentToken.sol";
-import {HelperConfig}          from "./HelperConfig.s.sol";
+import {GearNFT} from "../src/GearNFT.sol";
+import {NestableCharacterNFT} from "../src/CharacterNFT.sol";
+import {CharacterTBA} from "../src/CharacterTBA.sol";
+import {SlotRegistry} from "../src/SlotRegistry.sol";
+import {MintStageRegistry} from "../src/Registry/MintStageRegistry.sol";
+import {BaseNFTParams} from "../src/Base/BaseNFTNativePaymentToken.sol";
+import {HelperConfig} from "./HelperConfig.s.sol";
 
 /**
  * @notice Unified deployment script for the Nestable Character NFT system.
@@ -21,31 +21,22 @@ import {HelperConfig}          from "./HelperConfig.s.sol";
  *   forge script script/Deploy.s.sol --rpc-url $RPC_URL --broadcast --verify --etherscan-api-key $ETHERSCAN_KEY
  */
 contract Deploy is Script {
-
-    function run() external returns (
-        GearNFT,
-        NestableCharacterNFT,
-        MintStageRegistry,
-        CharacterTBA,
-        SlotRegistry,
-        HelperConfig
-    ) {
+    function run()
+        external
+        returns (GearNFT, NestableCharacterNFT, MintStageRegistry, CharacterTBA, SlotRegistry, HelperConfig)
+    {
         return deployContracts();
     }
 
-    function deployContracts() public returns (
-        GearNFT,
-        NestableCharacterNFT,
-        MintStageRegistry,
-        CharacterTBA,
-        SlotRegistry,
-        HelperConfig
-    ) {
+    function deployContracts()
+        public
+        returns (GearNFT, NestableCharacterNFT, MintStageRegistry, CharacterTBA, SlotRegistry, HelperConfig)
+    {
         HelperConfig helperConfig = new HelperConfig();
         HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
 
         uint256 deployerKey = vm.envUint("PRIVATE_KEY");
-        address deployer    = vm.addr(deployerKey);
+        address deployer = vm.addr(deployerKey);
 
         console.log("Deployer:          ", deployer);
         console.log("ERC-6551 Registry: ", config.erc6551Registry);
@@ -64,14 +55,14 @@ contract Deploy is Script {
         // 3. CharacterNFT
         NestableCharacterNFT characterNFT = new NestableCharacterNFT(
             BaseNFTParams.InitParams({
-                collectionName:      config.charName,
-                collectionSymbol:    config.charSymbol,
-                collectionOwner:     deployer,
+                collectionName: config.charName,
+                collectionSymbol: config.charSymbol,
+                collectionOwner: deployer,
                 collectionMaxSupply: config.charMaxSupply,
-                baseURI:             config.baseURI,
-                royaltyReceiver:     deployer,
-                royaltyFeeBps:       config.royaltyBps,
-                mintStageRegistry:   address(mintRegistry)
+                baseURI: config.baseURI,
+                royaltyReceiver: deployer,
+                royaltyFeeBps: config.royaltyBps,
+                mintStageRegistry: address(mintRegistry)
             })
         );
         console.log("CharacterNFT:      ", address(characterNFT));
@@ -86,11 +77,7 @@ contract Deploy is Script {
 
         // 6. SlotRegistry
         SlotRegistry slotRegistry = new SlotRegistry(
-            deployer,
-            config.erc6551Registry,
-            address(characterTBA),
-            address(characterNFT),
-            address(gearNFT)
+            deployer, config.erc6551Registry, address(characterTBA), address(characterNFT), address(gearNFT)
         );
         console.log("SlotRegistry:      ", address(slotRegistry));
 

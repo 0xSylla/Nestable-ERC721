@@ -12,7 +12,6 @@ import "../../src/Interfaces/IERC6551Account.sol";
  *      CharacterTBA's own access control is tested separately.
  */
 contract MockTBA is IERC6551Executable, IERC1155Receiver, ERC165 {
-
     receive() external payable {}
 
     // ─── IERC6551Executable ───────────────────────────────────────────────────
@@ -22,7 +21,12 @@ contract MockTBA is IERC6551Executable, IERC1155Receiver, ERC165 {
         uint256 value,
         bytes calldata data,
         uint8 /*operation*/
-    ) external payable override returns (bytes memory result) {
+    )
+        external
+        payable
+        override
+        returns (bytes memory result)
+    {
         bool success;
         (success, result) = to.call{value: value}(data);
         require(success, "MockTBA: call failed");
@@ -30,24 +34,28 @@ contract MockTBA is IERC6551Executable, IERC1155Receiver, ERC165 {
 
     // ─── IERC1155Receiver ─────────────────────────────────────────────────────
 
-    function onERC1155Received(
-        address, address, uint256, uint256, bytes calldata
-    ) external pure override returns (bytes4) {
+    function onERC1155Received(address, address, uint256, uint256, bytes calldata)
+        external
+        pure
+        override
+        returns (bytes4)
+    {
         return IERC1155Receiver.onERC1155Received.selector;
     }
 
-    function onERC1155BatchReceived(
-        address, address, uint256[] calldata, uint256[] calldata, bytes calldata
-    ) external pure override returns (bytes4) {
+    function onERC1155BatchReceived(address, address, uint256[] calldata, uint256[] calldata, bytes calldata)
+        external
+        pure
+        override
+        returns (bytes4)
+    {
         return IERC1155Receiver.onERC1155BatchReceived.selector;
     }
 
     // ─── ERC165 ───────────────────────────────────────────────────────────────
 
     function supportsInterface(bytes4 id) public view override(ERC165, IERC165) returns (bool) {
-        return
-            id == type(IERC1155Receiver).interfaceId ||
-            id == type(IERC6551Executable).interfaceId ||
-            super.supportsInterface(id);
+        return id == type(IERC1155Receiver).interfaceId || id == type(IERC6551Executable).interfaceId
+            || super.supportsInterface(id);
     }
 }

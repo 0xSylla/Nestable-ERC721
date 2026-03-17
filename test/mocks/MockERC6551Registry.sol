@@ -10,7 +10,6 @@ import "./MockTBA.sol";
  *      The `implementation` param is accepted but ignored — MockTBA is always used.
  */
 contract MockERC6551Registry is IERC6551Registry {
-
     mapping(bytes32 => address) private _accounts;
 
     function createAccount(
@@ -36,16 +35,20 @@ contract MockERC6551Registry is IERC6551Registry {
         uint256 chainId,
         address tokenContract,
         uint256 tokenId
-    ) external view override returns (address) {
+    )
+        external
+        view
+        override
+        returns (address)
+    {
         return _accounts[_key(salt, chainId, tokenContract, tokenId)];
     }
 
-    function _key(
-        bytes32 salt,
-        uint256 chainId,
-        address tokenContract,
-        uint256 tokenId
-    ) internal pure returns (bytes32) {
+    function _key(bytes32 salt, uint256 chainId, address tokenContract, uint256 tokenId)
+        internal
+        pure
+        returns (bytes32)
+    {
         return keccak256(abi.encode(salt, chainId, tokenContract, tokenId));
     }
 }

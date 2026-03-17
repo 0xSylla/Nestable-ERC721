@@ -32,25 +32,33 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *   4. Player calls equipToSlot() on SlotRegistry — gear is transferred to the character TBA.
  */
 contract GearNFT is ERC1155, Ownable {
-
     // GearType values map to the ones-digit of the token ID (1-4)
     //enum GearType { HELMET, ARMOR, BOOTS, WEAPON }
-    enum GearType { MOON, PASSENGER }
+    enum GearType {
+        MOON,
+        PASSENGER
+    }
     // Rarity values map to the thousands-digit of the token ID (1-5)
-    enum Rarity { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }
+    enum Rarity {
+        COMMON,
+        UNCOMMON,
+        RARE,
+        EPIC,
+        LEGENDARY
+    }
 
     struct GearDefinition {
-        string   name;
+        string name;
         GearType gearType;
-        Rarity   rarity;
-        uint256  maxSupply;
-        uint256  minted;
+        Rarity rarity;
+        uint256 maxSupply;
+        uint256 minted;
         /// @dev Full-colour image URI (unequipped state, returned by uri())
-        string   colorURI;
+        string colorURI;
         /// @dev Grayscale image URI (equipped state, served by the off-chain renderer)
-        string   bwURI;
-        uint256  attack;
-        uint256  defense;
+        string bwURI;
+        uint256 attack;
+        uint256 defense;
     }
 
     /// @dev tokenId => definition. maxSupply == 0 means not yet defined.
@@ -59,11 +67,11 @@ contract GearNFT is ERC1155, Ownable {
     event GearDefined(
         uint256 indexed tokenId,
         GearType gearType,
-        Rarity   rarity,
-        string   name,
-        uint256  maxSupply,
-        uint256  attack,
-        uint256  defense
+        Rarity rarity,
+        string name,
+        uint256 maxSupply,
+        uint256 attack,
+        uint256 defense
     );
     event GearMinted(uint256 indexed tokenId, address indexed to, uint256 amount);
 
@@ -85,28 +93,28 @@ contract GearNFT is ERC1155, Ownable {
      * @return tokenId   The deterministic token ID for this combination
      */
     function defineGear(
-        string   calldata name,
+        string calldata name,
         GearType gearType,
-        Rarity   rarity,
-        uint256  maxSupply_,
-        string   calldata colorURI_,
-        string   calldata bwURI_,
-        uint256  attack_,
-        uint256  defense_
+        Rarity rarity,
+        uint256 maxSupply_,
+        string calldata colorURI_,
+        string calldata bwURI_,
+        uint256 attack_,
+        uint256 defense_
     ) external onlyOwner returns (uint256 tokenId) {
         require(maxSupply_ > 0, "Supply must be > 0");
         tokenId = _computeTokenId(gearType, rarity);
         require(_gear[tokenId].maxSupply == 0, "Already defined");
         _gear[tokenId] = GearDefinition({
-            name:      name,
-            gearType:  gearType,
-            rarity:    rarity,
+            name: name,
+            gearType: gearType,
+            rarity: rarity,
             maxSupply: maxSupply_,
-            minted:    0,
-            colorURI:  colorURI_,
-            bwURI:     bwURI_,
-            attack:    attack_,
-            defense:   defense_
+            minted: 0,
+            colorURI: colorURI_,
+            bwURI: bwURI_,
+            attack: attack_,
+            defense: defense_
         });
         emit GearDefined(tokenId, gearType, rarity, name, maxSupply_, attack_, defense_);
     }

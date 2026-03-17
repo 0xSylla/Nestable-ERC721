@@ -3,45 +3,44 @@ pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 
-import {GearNFT}              from "../../src/GearNFT.sol";
+import {GearNFT} from "../../src/GearNFT.sol";
 import {NestableCharacterNFT} from "../../src/CharacterNFT.sol";
-import {CharacterTBA}         from "../../src/CharacterTBA.sol";
-import {SlotRegistry}         from "../../src/SlotRegistry.sol";
-import {MintStageRegistry}    from "../../src/Registry/MintStageRegistry.sol";
-import {BaseNFTParams}        from "../../src/Base/BaseNFTNativePaymentToken.sol";
+import {CharacterTBA} from "../../src/CharacterTBA.sol";
+import {SlotRegistry} from "../../src/SlotRegistry.sol";
+import {MintStageRegistry} from "../../src/Registry/MintStageRegistry.sol";
+import {BaseNFTParams} from "../../src/Base/BaseNFTNativePaymentToken.sol";
 
-import {MockERC6551Registry}  from "../mocks/MockERC6551Registry.sol";
-import {MockTBA}              from "../mocks/MockTBA.sol";
+import {MockERC6551Registry} from "../mocks/MockERC6551Registry.sol";
+import {MockTBA} from "../mocks/MockTBA.sol";
 
 contract SlotRegistryTest is Test {
-
     // ─── Contracts ────────────────────────────────────────────────────────────
 
-    GearNFT               internal gearNFT;
-    NestableCharacterNFT  internal characterNFT;
-    CharacterTBA          internal charTBAImpl;
-    MockERC6551Registry   internal mockRegistry;
-    SlotRegistry          internal slotRegistry;
-    MintStageRegistry     internal mintRegistry;
+    GearNFT internal gearNFT;
+    NestableCharacterNFT internal characterNFT;
+    CharacterTBA internal charTBAImpl;
+    MockERC6551Registry internal mockRegistry;
+    SlotRegistry internal slotRegistry;
+    MintStageRegistry internal mintRegistry;
 
     // ─── Actors ───────────────────────────────────────────────────────────────
 
-    address internal owner   = makeAddr("owner");
+    address internal owner = makeAddr("owner");
     address internal player1 = makeAddr("player1");
     address internal player2 = makeAddr("player2");
-    address internal other   = makeAddr("other");
+    address internal other = makeAddr("other");
 
     // ─── Slot keys ────────────────────────────────────────────────────────────
 
-    bytes32 constant MOON_SLOT      = keccak256("MOON");
+    bytes32 constant MOON_SLOT = keccak256("MOON");
     bytes32 constant PASSENGER_SLOT = keccak256("PASSENGER");
 
     // ─── Gear token IDs: (rarity+1)*1000 + (gearType+1) ────────────────────
     // GearType: MOON=0, PASSENGER=1
 
-    uint256 constant COMMON_MOON      = 1001;
+    uint256 constant COMMON_MOON = 1001;
     uint256 constant COMMON_PASSENGER = 1002;
-    uint256 constant RARE_MOON        = 3001;
+    uint256 constant RARE_MOON = 3001;
 
     // ─── Character token IDs ──────────────────────────────────────────────────
 
@@ -56,27 +55,23 @@ contract SlotRegistryTest is Test {
 
         characterNFT = new NestableCharacterNFT(
             BaseNFTParams.InitParams({
-                collectionName:      "Test Character",
-                collectionSymbol:    "CHAR",
-                collectionOwner:     owner,
+                collectionName: "Test Character",
+                collectionSymbol: "CHAR",
+                collectionOwner: owner,
                 collectionMaxSupply: 10_000,
-                baseURI:             "https://api.test.com/character/",
-                royaltyReceiver:     owner,
-                royaltyFeeBps:       500,
-                mintStageRegistry:   address(mintRegistry)
+                baseURI: "https://api.test.com/character/",
+                royaltyReceiver: owner,
+                royaltyFeeBps: 500,
+                mintStageRegistry: address(mintRegistry)
             })
         );
 
         mockRegistry = new MockERC6551Registry();
-        charTBAImpl  = new CharacterTBA(address(gearNFT));
+        charTBAImpl = new CharacterTBA(address(gearNFT));
 
         // SlotRegistry constructor seeds MOON (gearTypeIndex=0) and PASSENGER (gearTypeIndex=1)
         slotRegistry = new SlotRegistry(
-            owner,
-            address(mockRegistry),
-            address(charTBAImpl),
-            address(characterNFT),
-            address(gearNFT)
+            owner, address(mockRegistry), address(charTBAImpl), address(characterNFT), address(gearNFT)
         );
 
         charTBAImpl.initialize(address(slotRegistry));
@@ -94,20 +89,30 @@ contract SlotRegistryTest is Test {
 
         // Define gear
         vm.startPrank(owner);
-        gearNFT.defineGear("Common Moon",      GearNFT.GearType.MOON,      GearNFT.Rarity.COMMON,
-            50, "ipfs://c/moon", "ipfs://bw/moon", 10, 5);
-        gearNFT.defineGear("Common Passenger", GearNFT.GearType.PASSENGER, GearNFT.Rarity.COMMON,
-            50, "ipfs://c/pass", "ipfs://bw/pass", 5, 10);
-        gearNFT.defineGear("Rare Moon",        GearNFT.GearType.MOON,      GearNFT.Rarity.RARE,
-            10, "ipfs://c/rmoon", "ipfs://bw/rmoon", 40, 0);
+        gearNFT.defineGear(
+            "Common Moon", GearNFT.GearType.MOON, GearNFT.Rarity.COMMON, 50, "ipfs://c/moon", "ipfs://bw/moon", 10, 5
+        );
+        gearNFT.defineGear(
+            "Common Passenger",
+            GearNFT.GearType.PASSENGER,
+            GearNFT.Rarity.COMMON,
+            50,
+            "ipfs://c/pass",
+            "ipfs://bw/pass",
+            5,
+            10
+        );
+        gearNFT.defineGear(
+            "Rare Moon", GearNFT.GearType.MOON, GearNFT.Rarity.RARE, 10, "ipfs://c/rmoon", "ipfs://bw/rmoon", 40, 0
+        );
         vm.stopPrank();
 
         // Mint gear to players
         vm.startPrank(owner);
-        gearNFT.mint(player1, COMMON_MOON,      2);
-        gearNFT.mint(player1, COMMON_PASSENGER,  2);
-        gearNFT.mint(player2, COMMON_MOON,       1);
-        gearNFT.mint(player2, RARE_MOON,         1);
+        gearNFT.mint(player1, COMMON_MOON, 2);
+        gearNFT.mint(player1, COMMON_PASSENGER, 2);
+        gearNFT.mint(player2, COMMON_MOON, 1);
+        gearNFT.mint(player2, RARE_MOON, 1);
         vm.stopPrank();
 
         // Approve SlotRegistry
@@ -177,7 +182,7 @@ contract SlotRegistryTest is Test {
 
         address tba = _getTBA(CHAR_1);
         assertEq(gearNFT.balanceOf(player1, COMMON_MOON), 1);
-        assertEq(gearNFT.balanceOf(tba,     COMMON_MOON), 1);
+        assertEq(gearNFT.balanceOf(tba, COMMON_MOON), 1);
     }
 
     function test_equip_updatesSlotState() public {
@@ -232,10 +237,10 @@ contract SlotRegistryTest is Test {
     }
 
     function test_equip_bothSlotsOnSameCharacter() public {
-        _equip(player1, CHAR_1, MOON_SLOT,      COMMON_MOON);
+        _equip(player1, CHAR_1, MOON_SLOT, COMMON_MOON);
         _equip(player1, CHAR_1, PASSENGER_SLOT, COMMON_PASSENGER);
 
-        assertEq(slotRegistry.getSlot(CHAR_1, MOON_SLOT),      COMMON_MOON);
+        assertEq(slotRegistry.getSlot(CHAR_1, MOON_SLOT), COMMON_MOON);
         assertEq(slotRegistry.getSlot(CHAR_1, PASSENGER_SLOT), COMMON_PASSENGER);
     }
 
@@ -283,12 +288,12 @@ contract SlotRegistryTest is Test {
         address tba = _getTBA(CHAR_1);
 
         assertEq(gearNFT.balanceOf(player1, COMMON_MOON), 1);
-        assertEq(gearNFT.balanceOf(tba,     COMMON_MOON), 1);
+        assertEq(gearNFT.balanceOf(tba, COMMON_MOON), 1);
 
         _unequip(player1, CHAR_1, MOON_SLOT);
 
         assertEq(gearNFT.balanceOf(player1, COMMON_MOON), 2);
-        assertEq(gearNFT.balanceOf(tba,     COMMON_MOON), 0);
+        assertEq(gearNFT.balanceOf(tba, COMMON_MOON), 0);
     }
 
     function test_unequip_clearsSlotState() public {
@@ -499,15 +504,15 @@ contract SlotRegistryTest is Test {
     // ═══════════════════════════════════════════════════════════════════════════
 
     function test_gearEquippedCount_multipleGearTypes() public {
-        _equip(player1, CHAR_1, MOON_SLOT,      COMMON_MOON);
+        _equip(player1, CHAR_1, MOON_SLOT, COMMON_MOON);
         _equip(player1, CHAR_1, PASSENGER_SLOT, COMMON_PASSENGER);
 
-        assertEq(slotRegistry.gearEquippedCount(COMMON_MOON),      1);
+        assertEq(slotRegistry.gearEquippedCount(COMMON_MOON), 1);
         assertEq(slotRegistry.gearEquippedCount(COMMON_PASSENGER), 1);
 
         _unequip(player1, CHAR_1, PASSENGER_SLOT);
 
-        assertEq(slotRegistry.gearEquippedCount(COMMON_MOON),      1);
+        assertEq(slotRegistry.gearEquippedCount(COMMON_MOON), 1);
         assertEq(slotRegistry.gearEquippedCount(COMMON_PASSENGER), 0);
     }
 
@@ -534,7 +539,7 @@ contract SlotRegistryTest is Test {
 
         _equip(player1, CHAR_1, MOON_SLOT, COMMON_MOON);
         _equip(player2, CHAR_2, MOON_SLOT, COMMON_MOON);
-        _equip(other,   2,      MOON_SLOT, COMMON_MOON);
+        _equip(other, 2, MOON_SLOT, COMMON_MOON);
 
         assertEq(slotRegistry.getSlotOccupants(MOON_SLOT).length, 3);
 
@@ -544,7 +549,7 @@ contract SlotRegistryTest is Test {
         assertEq(occ.length, 2);
 
         bool hasChar1 = (occ[0] == CHAR_1 || occ[1] == CHAR_1);
-        bool hasChar3 = (occ[0] == 2      || occ[1] == 2);
+        bool hasChar3 = (occ[0] == 2 || occ[1] == 2);
         assertTrue(hasChar1, "CHAR_1 missing after swap-and-pop");
         assertTrue(hasChar3, "CHAR_3 missing after swap-and-pop");
     }

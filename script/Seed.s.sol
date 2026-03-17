@@ -2,8 +2,8 @@
 pragma solidity ^0.8.20;
 
 import {Script, console} from "forge-std/Script.sol";
-import {GearNFT}               from "../src/GearNFT.sol";
-import {NestableCharacterNFT}  from "../src/CharacterNFT.sol";
+import {GearNFT} from "../src/GearNFT.sol";
+import {NestableCharacterNFT} from "../src/CharacterNFT.sol";
 
 /**
  * @notice Seeds test data after deployment: defines gear, mints copies, airdrops characters.
@@ -19,13 +19,12 @@ import {NestableCharacterNFT}  from "../src/CharacterNFT.sol";
  *   forge script script/Seed.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
  */
 contract Seed is Script {
-
     function run() external {
         uint256 deployerKey = vm.envUint("PRIVATE_KEY");
-        address player      = vm.envAddress("PLAYER");
+        address player = vm.envAddress("PLAYER");
 
-        GearNFT gearNFT               = GearNFT(vm.envAddress("GEAR_NFT"));
-        NestableCharacterNFT charNFT  = NestableCharacterNFT(vm.envAddress("CHARACTER_NFT"));
+        GearNFT gearNFT = GearNFT(vm.envAddress("GEAR_NFT"));
+        NestableCharacterNFT charNFT = NestableCharacterNFT(vm.envAddress("CHARACTER_NFT"));
 
         vm.startBroadcast(deployerKey);
 
@@ -59,17 +58,17 @@ contract Seed is Script {
     }
 
     function _defineAllGear(GearNFT gearNFT) internal {
-        string[4] memory typeNames   = ["Helmet", "Armor", "Boots", "Sword"];
+        string[4] memory typeNames = ["Helmet", "Armor", "Boots", "Sword"];
         string[5] memory rarityNames = ["Iron", "Steel", "Mithril", "Dragon", "Legendary"];
 
         // Base stats per rarity: [attack_base, defense_base]
-        uint256[5] memory atkBase = [uint256(5),  10, 20, 35, 50];
+        uint256[5] memory atkBase = [uint256(5), 10, 20, 35, 50];
         uint256[5] memory defBase = [uint256(10), 15, 25, 40, 60];
 
         // Multiplier per gear type: HELMET(0,1), ARMOR(0,1.5), BOOTS(0.5,0.5), WEAPON(1.5,0)
         // Using integers x10 to avoid floats:
-        uint256[4] memory atkMult = [uint256(0),  0,  5,  15]; // /10
-        uint256[4] memory defMult = [uint256(10), 15, 5,  0];  // /10
+        uint256[4] memory atkMult = [uint256(0), 0, 5, 15]; // /10
+        uint256[4] memory defMult = [uint256(10), 15, 5, 0]; // /10
 
         for (uint8 rarity = 0; rarity < 5; rarity++) {
             for (uint8 gearType = 0; gearType < 4; gearType++) {

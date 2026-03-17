@@ -1,0 +1,39 @@
+{
+  "layers": [
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/85/background.png",
+      "z": 0
+    },
+    {
+      "slot": "MOON",
+      "z": 10
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/85/rockets.png",
+      "z": 20
+    },
+    {
+      "slot": "PASSENGER",
+      "z": 30
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/85/body.png",
+      "z": 40
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/85/face.png",
+      "z": 50
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/85/items.png",
+      "z": 60
+    }
+  ],
+  "traits": {
+    "Background": "The Unknown",
+    "Rockets": "Planet Express",
+    "Dirac Body": "Disco Suit",
+    "Dirac Face": "Happiness",
+    "Dirac Items": "Ducci"
+  }
+}

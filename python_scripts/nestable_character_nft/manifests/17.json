@@ -1,0 +1,39 @@
+{
+  "layers": [
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/17/background.png",
+      "z": 0
+    },
+    {
+      "slot": "MOON",
+      "z": 10
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/17/rockets.png",
+      "z": 20
+    },
+    {
+      "slot": "PASSENGER",
+      "z": 30
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/17/body.png",
+      "z": 40
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/17/face.png",
+      "z": 50
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/17/items.png",
+      "z": 60
+    }
+  ],
+  "traits": {
+    "Background": "Golden Teachers",
+    "Rockets": "Apollo 11",
+    "Dirac Body": "Disco Suit",
+    "Dirac Face": "3rd Eye",
+    "Dirac Items": "Red Plume Knight"
+  }
+}

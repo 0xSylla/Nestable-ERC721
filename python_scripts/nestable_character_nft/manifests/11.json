@@ -1,0 +1,39 @@
+{
+  "layers": [
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/11/background.png",
+      "z": 0
+    },
+    {
+      "slot": "MOON",
+      "z": 10
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/11/rockets.png",
+      "z": 20
+    },
+    {
+      "slot": "PASSENGER",
+      "z": 30
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/11/body.png",
+      "z": 40
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/11/face.png",
+      "z": 50
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/11/items.png",
+      "z": 60
+    }
+  ],
+  "traits": {
+    "Background": "Shooting Stars",
+    "Rockets": "Sputnik 2",
+    "Dirac Body": "Disco Suit",
+    "Dirac Face": "Unbothered",
+    "Dirac Items": "Long Laser Eyes"
+  }
+}

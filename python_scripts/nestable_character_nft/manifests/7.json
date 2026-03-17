@@ -1,0 +1,39 @@
+{
+  "layers": [
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/7/background.png",
+      "z": 0
+    },
+    {
+      "slot": "MOON",
+      "z": 10
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/7/rockets.png",
+      "z": 20
+    },
+    {
+      "slot": "PASSENGER",
+      "z": 30
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/7/body.png",
+      "z": 40
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/7/face.png",
+      "z": 50
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/7/items.png",
+      "z": 60
+    }
+  ],
+  "traits": {
+    "Background": "The Unknown",
+    "Rockets": "Plug",
+    "Dirac Body": "Black Suit",
+    "Dirac Face": "Gremlins",
+    "Dirac Items": "Arbera"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "layers": [
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/2/background.png",
+      "z": 0
+    },
+    {
+      "slot": "MOON",
+      "z": 10
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/2/rockets.png",
+      "z": 20
+    },
+    {
+      "slot": "PASSENGER",
+      "z": 30
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/2/body.png",
+      "z": 40
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/2/face.png",
+      "z": 50
+    },
+    {
+      "uri": "IPFS_CID_PLACEHOLDER/layers/2/items.png",
+      "z": 60
+    }
+  ],
+  "traits": {
+    "Background": "Cubensis Beras",
+    "Rockets": "Unicorn",
+    "Dirac Body": "Black Suit",
+    "Dirac Face": "Unbothered",
+    "Dirac Items": "McDonald's"
+  }
+}

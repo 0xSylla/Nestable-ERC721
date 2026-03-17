@@ -16,6 +16,9 @@ docs/
 # Node
 node_modules/
 
+# Next.js build
+.next/
+
 # Generated IPFS folders
 nestable_charcter_nft/
 passenger/
